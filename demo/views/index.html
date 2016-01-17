@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Chat room</title>
+</head>
+<body>
+  <h3>S20: <span id="s20_status"></span></h3>
+  <button id="s20_changeStatus">Change status</button>
+  
+  <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io(); // Inicializamos socketIO en el cliente
+    
+    socket.on('connect', function() {
+      console.log('request status');
+      socket.emit('s20/command','requestStatus')
+    });
+
+    //Si se recibe una actualización del estado
+    socket.on('s20/status', function (msg) {
+      document.getElementById('s20_status').innerHTML = msg;
+    });
+
+    $("#s20_changeStatus").click(function() {
+      socket.emit('s20/command','changeStatus')
+    });
+    
+  </script>
+</body>
+</html>
